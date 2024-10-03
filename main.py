@@ -23,10 +23,14 @@ class VK_API:
             try:
                 with open(f'Image/{file_name}.jpg', 'wb') as f:
                     f.write(photo_response.content)
+            except requests.exceptions.RequestException as req_e:
+                print(f"Ошибка запроса при загрузке фото: {photo_url}, ошибка: {req_e}")
+            except OSError as os_e:
+                print(f"Ошибка при сохранении фото: {file_name}.jpg, ошибка: {os_e}")
             except Exception as e:
-                print(f"Ошибка при загрузке фото: {photo_url}, ошибка: {e}")
+                print(f"Произошла непредвиденная ошибка при загрузке фото: {photo_url}, ошибка: {e}")
             else:
-                print('Фотографии успешно сохранены!')
+                print(f'Фото {file_name}.jpg успешно сохранено!')
 
 
 
@@ -59,8 +63,14 @@ class YD_API:
                 url_upload = response['href']
                 with open(file_path, 'rb') as file:
                     requests.put(url_upload, files={'file': file})
+        except requests.exceptions.RequestException as req_e:
+            print(f"Ошибка запроса: {req_e}")
+        except FileNotFoundError as fnf_e:
+            print(f"Файл не найден: {fnf_e}")
+        except ValueError as val_e:
+            print(f"Ошибка значения: {val_e}")
         except Exception as e:
-            print(e)
+            print(f"Произошла непредвиденная ошибка: {e}")
 
         else:
             print('Фотографии успешно загружены на Яндекс.Диск!')
